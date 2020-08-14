@@ -3,6 +3,10 @@ const express = require('express');
 const morgan = require('morgan');
 const cors = require('cors');
 const helmet = require('helmet');
+
+const logger = require('./logger');
+const bearerToken = require('./bearerToken');
+const bookmarksRouter = require('./bookmarksRouter');
 const { NODE_ENV } = require('./config.js');
 
 const app = express();
@@ -13,9 +17,9 @@ app.use(morgan(morganOption));
 app.use(helmet());
 app.use(cors());
 
-app.get('/', (req, res) => {
-  res.send('Hello, world!');
-});
+app.use(bearerToken);
+
+app.use(bookmarksRouter);
 
 app.use(function errorHandler(error, req, res, next) {
   let response;
